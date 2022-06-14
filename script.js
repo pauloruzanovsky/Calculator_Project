@@ -1,48 +1,72 @@
-// function add(a,b) {
-//     alert(a + b);
-// }
-
-// function subtract(a,b) {
-//     alert(a - b);
-// }
-
-// function multiply(a,b) {
-//     alert(a * b);
-// }
-
-// function divide(a,b) {
-//     alert(a / b);
-// }
-
-// function operate() {
-//     let a = parseInt(prompt("First number: "));
-//     let b = parseInt(prompt("Second number: "));
-//     let operation = prompt("Add, subtract, multiply or divide?").toLowerCase();
-
-//     switch(operation) {
-//         case 'add':
-//             add(a,b)
-//             break;
-//         case 'subtract':
-//             subtract(a,b);
-//             break;
-//         case 'multiply':
-//             multiply(a,b);
-//             break;
-//         case 'divide':
-//             divide(a,b);
-//     }
-// }
-
-// for(let i = 0; i < 9; i++) {
-//     const buttonValue = document.getElementById(i);
-//     console.log(buttonValue);
-// }
+let display = document.createElement('div');
+display.classList.add('display');
+const container = document.querySelector('.container');
+container.appendChild(display);
+let value1 = '';
+let value2 = '';
+let currentOperation = '';
 
 
+//This function sends the numbers to the display once 
+//the buttons are clicked
+function returnNumberFromButton() {
 let numberButtons = document.querySelectorAll('.number');
-    numberButtons.forEach(button => {
-        button.addEventListener('click', function(e) {
-            console.log(e.target.innerText);
-        });
+numberButtons.forEach(button => {
+    button.addEventListener('click', function(e) {
+        if(value1 !== '' && value1 == display.textContent) {
+            display.textContent = '';
+        }
+        
+        display.textContent += e.target.innerText;
+        return display.textContent;
+
     });
+});
+}
+
+function operate() {
+    let runningResult;
+    returnNumberFromButton();
+    let operationButtons = document.querySelectorAll('.operation');
+    operationButtons.forEach(button => {
+        button.addEventListener('click', function(e) {
+            if(e.target.classList[1] === 'clear'){
+                display.textContent = '';
+                value1 = '';
+                value2 = '';
+                runningResult = '';
+            } else {
+            if (value1 === '') {
+                value1 = +display.textContent;
+                console.log('value1: '+ value1);
+                currentOperation = e.target.classList[1];
+                console.log(currentOperation);
+            } 
+
+            else {
+                value2 = +display.textContent;
+                console.log('value2: ' + value2);
+                if(currentOperation === 'add') {
+                    runningResult = value1 + value2;
+                } 
+                else if(currentOperation === 'subtract') {
+                    runningResult = value1 - value2;
+                } else if(currentOperation === 'multiply') {
+                    runningResult = value1 * value2;
+                } else if(currentOperation === 'divide') {
+                    runningResult = value1/value2;
+                }
+                currentOperation = e.target.classList[1];
+                console.log(currentOperation);
+                value1 = runningResult;
+                value2 = '';
+                display.textContent = Math.round((runningResult + Number.EPSILON)*100)/100;
+                console.log(runningResult);
+            }
+            }
+            
+});
+});
+}
+
+operate();
