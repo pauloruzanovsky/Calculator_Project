@@ -1,7 +1,7 @@
 let display = document.createElement('div');
 display.classList.add('display');
-const container = document.querySelector('.container');
-container.appendChild(display);
+const displayContainer = document.querySelector('.displayContainer');
+displayContainer.appendChild(display);
 let value1 = '';
 let value2 = '';
 let currentOperation = '';
@@ -11,8 +11,12 @@ let currentOperation = '';
 //the buttons are clicked
 function returnNumberFromButton() {
 let numberButtons = document.querySelectorAll('.number');
-numberButtons.forEach(button => {
+numberButtons.forEach(button => { 
     button.addEventListener('click', function(e) {
+        if(e.target.innerText === '.' && display.textContent.indexOf('.') !== -1){
+            return display.textContent;
+        }
+
         if(value1 !== '' && value1 == display.textContent) {
             display.textContent = '';
         }
@@ -35,33 +39,29 @@ function operate() {
                 value1 = '';
                 value2 = '';
                 runningResult = '';
+            } else if(e.target.classList[1] === 'equal' && display.textContent === '') {
             } else {
             if (value1 === '') {
                 value1 = +display.textContent;
-                console.log('value1: '+ value1);
                 currentOperation = e.target.classList[1];
-                console.log(currentOperation);
             } 
 
             else {
                 value2 = +display.textContent;
-                console.log('value2: ' + value2);
                 if(currentOperation === 'add') {
                     runningResult = value1 + value2;
-                } 
-                else if(currentOperation === 'subtract') {
+                } else if(currentOperation === 'subtract') {
                     runningResult = value1 - value2;
                 } else if(currentOperation === 'multiply') {
                     runningResult = value1 * value2;
                 } else if(currentOperation === 'divide') {
+
                     runningResult = value1/value2;
                 }
                 currentOperation = e.target.classList[1];
-                console.log(currentOperation);
                 value1 = runningResult;
                 value2 = '';
                 display.textContent = Math.round((runningResult + Number.EPSILON)*100)/100;
-                console.log(runningResult);
             }
             }
             
